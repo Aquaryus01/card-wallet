@@ -1,3 +1,5 @@
+<img src="public/icons/icon-192.png" width="96" alt="CardWallet logo">
+
 # CardWallet
 
 **All your loyalty cards in one place. Private, offline, and fast at the checkout.**

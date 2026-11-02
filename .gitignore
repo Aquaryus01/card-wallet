@@ -46,3 +46,7 @@ Thumbs.db
 # Playwright
 /e2e-report
 /test-results
+
+# Signing keys
+*.jks
+*.keystore
