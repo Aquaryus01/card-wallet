@@ -1,4 +1,4 @@
-<img src="public/icons/icon-192.png" width="96" alt="CardWallet logo">
+![CardWallet: the card list and an open gym membership on Android](docs/banner.png)
 
 # CardWallet
 
