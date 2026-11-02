@@ -137,4 +137,6 @@ Hand-written entries are never dropped: their id, name, colour and domain are ke
 - Store locations and counts: © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), ODbL.
 - Barcode rendering: [bwip-js](https://github.com/metafloor/bwip-js).
 
-Store names, logos and trademarks belong to their owners. CardWallet is not affiliated with or endorsed by any merchant.
+## License
+
+Code: [MIT](LICENSE). Store names, logos and trademarks belong to their owners and are not covered by this license. CardWallet is not affiliated with or endorsed by any merchant.

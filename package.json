@@ -14,6 +14,7 @@
     "e2e:report": "playwright show-report e2e-report"
   },
   "private": true,
+  "license": "MIT",
   "packageManager": "npm@11.20.0",
   "dependencies": {
     "@angular/common": "^22.2.0",
