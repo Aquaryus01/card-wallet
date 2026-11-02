@@ -1,0 +1,56 @@
+{
+  // For more information, visit: https://go.microsoft.com/fwlink/?LinkId=733558
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "start",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "typescript",
+        "pattern": "$tsc",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": {
+            "regexp": "Changes detected"
+          },
+          "endsPattern": {
+            "regexp": "bundle generation (complete|failed)"
+          }
+        }
+      }
+    },
+    {
+      "label": "test (vitest, single run)",
+      "type": "shell",
+      "command": "npx ng test --watch=false",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "build",
+      "type": "npm",
+      "script": "build",
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "cap: build + sync",
+      "type": "shell",
+      "command": "npm run build && npx cap sync",
+      "problemMatcher": []
+    },
+    {
+      "label": "cap: open Android Studio",
+      "type": "shell",
+      "command": "npx cap open android",
+      "problemMatcher": []
+    },
+    {
+      "label": "cap: run on Android device (live reload)",
+      "type": "shell",
+      "command": "npx ionic cap run android -l --external",
+      "problemMatcher": []
+    }
+  ]
+}

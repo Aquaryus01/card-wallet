@@ -1,0 +1,270 @@
+// Google Wallet-style stack: each card overlaps the previous one so only its top strip
+// (logo + name) stays visible; the last card shows in full. The page scrolls normally.
+.stack {
+  --peek: 76px;
+  container-type: inline-size; // 100cqw = card width, so card height = 100cqw / 1.586
+  max-width: 520px;
+  margin: 8px auto 0;
+  padding-bottom: 96px; // keep the last card clear of the FAB
+
+  app-card-tile {
+    position: relative;
+  }
+
+  app-card-tile + app-card-tile {
+    margin-top: calc(var(--peek) - 100cqw / 1.586);
+  }
+}
+
+// Large "Wallet" title with the card count above it, settings button on the right.
+.hero {
+  --min-height: 96px;
+}
+
+.hero-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 16px 4px 14px;
+}
+
+.hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.eyebrow {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--app-text-2);
+}
+
+.add-pill {
+  height: 54px;
+  --padding-start: 26px;
+  --padding-end: 26px;
+  font-size: 16px;
+  --box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+}
+
+// Cards | Memberships switch, same look as the Grid / Stack choice in Settings.
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  max-width: 520px;
+  margin: 0 auto 14px;
+  padding: 4px;
+  border-radius: 14px;
+  background: var(--app-surface);
+  box-shadow: 0 0 0 1px var(--app-ring);
+
+  button {
+    height: 38px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--app-text-2);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      background 0.15s ease,
+      color 0.15s ease;
+
+    &.on {
+      background: var(--app-ink);
+      color: var(--app-on-ink);
+    }
+  }
+}
+
+// Memberships: one row each, with entries left and expiry.
+.memberships {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 520px;
+  margin: 0 auto;
+  padding-bottom: 110px; // clear of the Add card pill
+}
+
+.m-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 14px;
+  width: 100%;
+  padding: 14px 16px;
+  border: 0;
+  border-radius: 18px;
+  background: var(--app-surface);
+  box-shadow: 0 0 0 1px var(--app-ring);
+  color: var(--app-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  &:active {
+    background: var(--app-surface-2);
+  }
+}
+
+.m-logo {
+  --logo-size: 48px;
+}
+
+.m-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.m-name {
+  font-size: 17px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.m-sub {
+  font-size: 13px;
+  color: var(--app-text-2);
+
+  &.warn {
+    color: var(--ion-color-danger);
+    font-weight: 600;
+  }
+}
+
+.m-left {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+
+  strong {
+    font-family: var(--app-font-display);
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+
+  .of {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--app-text-2);
+  }
+
+  small {
+    margin-left: 2px;
+    font-size: 12px;
+    color: var(--app-text-2);
+  }
+}
+
+.m-bar {
+  grid-column: 2 / -1;
+  height: 5px;
+  margin-top: 10px;
+  border-radius: 999px;
+  background: var(--app-surface-2);
+  overflow: hidden;
+
+  span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--app-ink);
+  }
+}
+
+// Grid of logo tiles: each card's colour and logo identify it at a glance.
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  max-width: 520px;
+  margin: 8px auto 0;
+  padding: 0 4px 110px; // keep the last row clear of the Add card pill
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: 22vh;
+  color: var(--app-text-2);
+
+  ion-icon {
+    font-size: 40px;
+    color: var(--app-text);
+    width: 88px;
+    height: 88px;
+    padding: 24px;
+    box-sizing: border-box;
+    border-radius: 28px;
+    background: var(--app-surface);
+    box-shadow: 0 0 0 1px var(--app-ring);
+  }
+
+  h2 {
+    margin: 20px 0 6px;
+    font-family: var(--app-font-display);
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--app-text);
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border: 0;
+  border-radius: 16px;
+  background: var(--app-ink);
+  color: var(--app-on-ink);
+  font: inherit;
+  font-size: 15px;
+  text-align: start;
+  cursor: pointer;
+
+  span {
+    flex: 1;
+  }
+
+  ion-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .close {
+    opacity: 0.8;
+    padding: 4px;
+    margin: -4px;
+  }
+}
+
+.sheet-title {
+  margin: 4px 0 8px;
+  font-size: 18px;
+}
+
+.sheet-logo {
+  --logo-size: 40px;
+}

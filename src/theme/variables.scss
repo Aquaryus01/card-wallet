@@ -1,0 +1,77 @@
+// "Soft Mono" theme: monochrome surfaces so the cards' brand colours are the only colour on screen.
+// Declared after palettes/dark.system.css; :root.md / :root.ios match its specificity so these win.
+:root,
+:root.md,
+:root.ios {
+  --ion-font-family: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --app-font-display: 'Inter Tight Variable', 'Inter Variable', system-ui, sans-serif;
+
+  --app-bg: #f5f5f7;
+  --app-surface: #ffffff;
+  --app-surface-2: #efeff2; // icon squares, pressed rows
+  --app-hairline: rgba(0, 0, 0, 0.06); // dividers inside a group
+  --app-ring: rgba(0, 0, 0, 0.05); // 1px outline around white panels
+  --app-text: #0a0a0b;
+  --app-text-2: #6e6e73;
+  --app-ink: #0a0a0b; // filled buttons
+  --app-on-ink: #ffffff;
+  --app-dashed: rgba(0, 0, 0, 0.18);
+
+  --ion-background-color: var(--app-bg);
+  --ion-background-color-rgb: 245, 245, 247;
+  --ion-text-color: var(--app-text);
+  --ion-text-color-rgb: 10, 10, 11;
+  --ion-toolbar-background: var(--app-bg);
+  --ion-toolbar-border-color: transparent;
+  --ion-toolbar-color: var(--app-text);
+  --ion-item-background: var(--app-surface);
+  --ion-item-border-color: var(--app-hairline);
+  --ion-card-background: var(--app-surface);
+  --ion-placeholder-color: var(--app-text-2);
+
+  --ion-color-primary: #0a0a0b;
+  --ion-color-primary-rgb: 10, 10, 11;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #000000;
+  --ion-color-primary-tint: #232324;
+
+  --ion-color-medium: #6e6e73;
+  --ion-color-medium-rgb: 110, 110, 115;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root,
+  :root.md,
+  :root.ios {
+    --app-bg: #000000;
+    --app-surface: #1c1c1e;
+    --app-surface-2: #2c2c2e;
+    --app-hairline: rgba(255, 255, 255, 0.08);
+    --app-ring: rgba(255, 255, 255, 0.06);
+    --app-text: #f5f5f7;
+    --app-text-2: #98989f;
+    --app-ink: #f5f5f7;
+    --app-on-ink: #0a0a0b;
+    --app-dashed: rgba(255, 255, 255, 0.2);
+
+    --ion-background-color: var(--app-bg);
+    --ion-background-color-rgb: 0, 0, 0;
+    --ion-text-color: var(--app-text);
+    --ion-text-color-rgb: 245, 245, 247;
+    --ion-toolbar-background: var(--app-bg);
+    --ion-toolbar-color: var(--app-text);
+    --ion-item-background: var(--app-surface);
+    --ion-card-background: var(--app-surface);
+
+    --ion-color-primary: #f5f5f7;
+    --ion-color-primary-rgb: 245, 245, 247;
+    --ion-color-primary-contrast: #0a0a0b;
+    --ion-color-primary-contrast-rgb: 10, 10, 11;
+    --ion-color-primary-shade: #d8d8da;
+    --ion-color-primary-tint: #f6f6f8;
+
+    --ion-color-medium: #98989f;
+    --ion-color-medium-rgb: 152, 152, 159;
+  }
+}

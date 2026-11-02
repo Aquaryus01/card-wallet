@@ -1,0 +1,80 @@
+{
+  // Formatting: Prettier (uses .prettierrc) on save
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit",
+    "source.fixAll.eslint": "explicit"
+  },
+
+  // ESLint (angular-eslint): lint .ts and Angular .html templates
+  "eslint.useFlatConfig": true,
+  "eslint.validate": ["typescript", "html"],
+  "[html]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[scss]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[jsonc]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "prettier.requireConfig": true,
+
+  // Editor
+  "editor.tabSize": 2,
+  "editor.rulers": [100],
+  "editor.linkedEditing": true,
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active",
+  "editor.inlayHints.enabled": "onUnlessPressed",
+  "files.eol": "\n",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+
+  // TypeScript: use the project's TS version, single quotes, non-relative-when-sensible imports
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "js/ts.tsdk.promptToUseWorkspaceVersion": true,
+  "js/ts.preferences.quoteStyle": "single",
+  "js/ts.preferences.importModuleSpecifier": "relative",
+  "js/ts.updateImportsOnFileMove.enabled": "always",
+  "js/ts.inlayHints.parameterNames.enabled": "literals",
+  "js/ts.inlayHints.functionLikeReturnTypes.enabled": true,
+
+  // Angular language service
+  "angular.enable-strict-mode-prompt": false,
+
+  // Ionic web components in templates: suppress unknown-element noise in plain HTML/CSS validation
+  "html.validate.scripts": false,
+  "css.lint.unknownAtRules": "ignore",
+  "scss.lint.unknownAtRules": "ignore",
+
+  // Group component files (ts/html/scss/spec) under the .ts file
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.expand": false,
+  "explorer.fileNesting.patterns": {
+    "*.ts": "${capture}.html, ${capture}.scss, ${capture}.css, ${capture}.spec.ts",
+    "package.json": "package-lock.json, .prettierrc, .editorconfig, .gitignore",
+    "angular.json": "tsconfig*.json, ionic.config.json, capacitor.config.ts"
+  },
+
+  // Keep build output and native projects out of search / watchers
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/.angular": true,
+    "android/**/build": true,
+    "ios/App/Pods": true
+  },
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/.angular/**": true,
+    "**/android/**/build/**": true,
+    "**/android/.gradle/**": true,
+    "**/ios/App/Pods/**": true
+  },
+  "files.exclude": {
+    "**/.angular": true
+  },
+
+  // Error Lens: inline diagnostics, but not too noisy
+  "errorLens.enabledDiagnosticLevels": ["error", "warning"],
+  "errorLens.delay": 300
+}

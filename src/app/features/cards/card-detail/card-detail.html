@@ -1,0 +1,89 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" />
+    </ion-buttons>
+    <ion-title class="centered">{{ card()?.name }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button class="round-btn" (click)="edit()" aria-label="Edit">
+        <ion-icon slot="icon-only" name="create-outline" />
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if (card(); as c) {
+    <div class="after-face">
+
+    @if (c.code) {
+      <app-barcode-view [value]="c.code" [format]="c.codeFormat" />
+    } @else {
+      <p class="muted">No card number saved. Show a photo of the card instead, or add the number via Edit.</p>
+    }
+
+    @if (membershipUrl(); as url) {
+      <section class="membership" [class.expired]="membership()?.expired">
+        <div class="m-head">
+          <span class="m-label">Subscription</span>
+          <button type="button" class="m-refresh" (click)="refreshMembership()" [disabled]="membershipLoading()" aria-label="Refresh subscription">
+            <ion-icon name="refresh-outline" [class.spin]="membershipLoading()" />
+          </button>
+        </div>
+
+        @if (membership(); as m) {
+          @if (m.plan) {
+            <div class="m-row">
+              <div class="m-stat">
+                <strong>
+                  {{ m.remainingEntries ?? '–' }}
+                  @if (m.totalEntries) {
+                    <span class="of">/ {{ m.totalEntries }}</span>
+                  }
+                </strong>
+                <span>{{ m.remainingEntries === 1 ? 'entry left' : 'entries left' }}</span>
+              </div>
+              @if (m.expiresLabel) {
+                <div class="m-stat end">
+                  <strong class="date">{{ m.expiresLabel }}</strong>
+                  <span [class.warn]="m.expired">{{ m.daysLabel }}</span>
+                </div>
+              }
+            </div>
+            @if (m.progress !== null) {
+              <div class="m-bar" role="progressbar" [attr.aria-valuenow]="m.remainingEntries" aria-valuemin="0" [attr.aria-valuemax]="m.totalEntries">
+                <span [style.width.%]="m.progress * 100"></span>
+              </div>
+            }
+          } @else {
+            <p class="m-note">No active subscription on the gym's page.</p>
+          }
+          <div class="m-foot">
+            <span>{{ membershipFailed() ? "Couldn't refresh · showing last known" : m.updatedLabel }}</span>
+            <a [href]="url" target="_blank" rel="noopener">Open page</a>
+          </div>
+        } @else if (membershipFailed()) {
+          <p class="m-note">Couldn't reach the gym's site. Check your connection and tap refresh.</p>
+        } @else {
+          <p class="m-note">Loading subscription…</p>
+        }
+      </section>
+    }
+
+    @if (showPhotos() && photoList().length) {
+      <div class="photos">
+        @for (p of photoList(); track p.url; let i = $index) {
+          <button type="button" class="thumb" (click)="openPhoto(i)" [attr.aria-label]="'View ' + p.label">
+            <img [src]="p.url" [alt]="p.label" decoding="async" />
+            <span>{{ p.label }}</span>
+          </button>
+        }
+      </div>
+    }
+
+    @if (c.notes) {
+      <p class="notes">{{ c.notes }}</p>
+    }
+    </div>
+  }
+</ion-content>

@@ -1,0 +1,187 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button class="text-btn" (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title class="centered">{{ isNew() ? 'New card' : 'Edit card' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button class="pill" (click)="save()" [disabled]="saving()">Save</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="preview">
+    <app-card-tile [card]="previewCard()" [variant]="previewVariant()" [interactive]="false" />
+    @if (!color() && merchantId()) {
+      <p class="preview-note">Colour picked automatically</p>
+    }
+  </div>
+
+  <div class="section">
+    <span class="section-label">Card</span>
+    <ion-list class="group">
+      <ion-item>
+        <ion-input
+          label="Store"
+          labelPlacement="stacked"
+          placeholder="e.g. Kaufland"
+          autocapitalize="words"
+          [required]="true"
+          [value]="name()"
+          (ionInput)="onNameInput($event.detail.value)"
+          (ionFocus)="nameFocused.set(true)"
+          (ionBlur)="onNameBlur()"
+        />
+      </ion-item>
+      @for (m of suggestions(); track m.id) {
+        <ion-item button [detail]="false" (mousedown)="$event.preventDefault()" (click)="pickMerchant(m)">
+          <app-merchant-logo slot="start" class="sugg-logo" [name]="m.name" [merchantId]="m.id" />
+          <ion-label>{{ m.name }}</ion-label>
+        </ion-item>
+      }
+      <ion-item>
+        <ion-input
+          label="Card number"
+          labelPlacement="stacked"
+          placeholder="Optional"
+          [value]="code()"
+          (ionInput)="onCodeInput($event.detail.value)"
+        />
+        <div slot="end" class="code-actions">
+          <input #codeImage type="file" accept="image/*" hidden (change)="onCodeImagePicked($event)" />
+          <ion-button class="image-btn" (click)="codeImage.click()" [disabled]="scanning()" aria-label="Read code from a picture">
+            <ion-icon slot="icon-only" name="image-outline" />
+          </ion-button>
+          <ion-button class="scan-btn" (click)="scan()" [disabled]="scanning()" aria-label="Scan barcode">
+            <ion-icon slot="icon-only" name="scan-outline" />
+          </ion-button>
+        </div>
+      </ion-item>
+      <ion-item>
+        <ion-select
+          label="Barcode format"
+          interface="action-sheet"
+          placeholder="Auto"
+          [value]="codeFormat()"
+          (ionChange)="codeFormat.set($event.detail.value)"
+        >
+          @for (f of formats; track f.value) {
+            <ion-select-option [value]="f.value">{{ f.label }}</ion-select-option>
+          }
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-toggle
+          [checked]="membership() || membershipDetected()"
+          [disabled]="membershipDetected()"
+          (ionChange)="membership.set($event.detail.checked)"
+        >
+          Membership
+          <span class="toggle-sub">{{ membershipDetected() ? 'Detected from the code · shows entries and expiry' : 'Gym, pool or pass: listed under Memberships' }}</span>
+        </ion-toggle>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <div class="section">
+    <span class="section-label">Colour</span>
+    <div class="swatches">
+      <button type="button" class="auto" [class.on]="!color()" (click)="color.set(undefined)">Auto</button>
+      @for (s of swatches; track s.value) {
+        <button
+          type="button"
+          class="swatch"
+          [class.on]="color() === s.value"
+          [style.background]="s.value"
+          [attr.aria-label]="s.label"
+          (click)="color.set(s.value)"
+        ></button>
+      }
+      <label class="swatch custom" [class.on]="isCustomColor()" [style.--picked]="isCustomColor() ? color() : null" aria-label="Custom colour">
+        <input type="color" [value]="color() ?? '#888888'" (input)="onColorPicked($event)" />
+      </label>
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="section-label">Photos</span>
+    <div class="photos">
+      <button type="button" class="photo-slot" (click)="choosePhoto('front')">
+        @if (frontUrl(); as url) {
+          <img [src]="url" alt="Front of card" />
+        } @else {
+          <ion-icon name="camera-outline" />
+        }
+        <span>Front</span>
+      </button>
+      <button type="button" class="photo-slot" (click)="choosePhoto('back')">
+        @if (backUrl(); as url) {
+          <img [src]="url" alt="Back of card" />
+        } @else {
+          <ion-icon name="camera-outline" />
+        }
+        <span>Back</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="section-label">Stores</span>
+    <ion-list class="group">
+      @for (loc of locations(); track $index) {
+        <ion-item>
+          <ion-icon slot="start" name="location-outline" color="medium" />
+          <ion-label class="ion-text-wrap">
+            {{ loc.label }}
+            <p>Opens within {{ loc.radiusM }} m</p>
+          </ion-label>
+          <ion-button slot="end" fill="clear" color="medium" (click)="removeLocation($index)" aria-label="Remove location">
+            <ion-icon slot="icon-only" name="trash-outline" />
+          </ion-button>
+        </ion-item>
+      }
+      <ion-item button [detail]="false" [disabled]="!!locating()" (click)="addCurrentLocation()">
+        <ion-icon slot="start" name="locate-outline" />
+        <ion-label>{{ locating() === 'here' ? 'Getting location…' : "I'm in this store now" }}</ion-label>
+      </ion-item>
+      <ion-item button [detail]="false" [disabled]="!!locating()" (click)="findStores()">
+        <ion-icon slot="start" name="search-outline" />
+        <ion-label>{{ locating() === 'search' ? 'Searching nearby…' : 'Find stores automatically' }}</ion-label>
+      </ion-item>
+    </ion-list>
+    @if (locationBlocked(); as text) {
+      <div class="hint-row">
+        <p class="hint">{{ text }}</p>
+        <ion-button class="pill small" (click)="openLocationSettings()">Open settings</ion-button>
+      </div>
+    }
+  </div>
+
+  <div class="section">
+    <span class="section-label">Notes</span>
+    <ion-list class="group">
+      <ion-item>
+        <ion-textarea
+          aria-label="Notes"
+          placeholder="Optional"
+          [autoGrow]="true"
+          [value]="notes()"
+          (ionInput)="notes.set($event.detail.value ?? '')"
+        />
+      </ion-item>
+    </ion-list>
+  </div>
+
+  @if (!isNew()) {
+    <div class="section">
+      <ion-list class="group">
+        <ion-item button [detail]="false" (click)="confirmDelete()">
+          <ion-label color="danger" class="ion-text-center">Delete card</ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+  }
+
+  <div class="bottom-space"></div>
+</ion-content>

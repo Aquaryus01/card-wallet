@@ -1,0 +1,205 @@
+// Live preview of the card being edited, same look as in the list.
+.preview {
+  max-width: 340px;
+  margin: 8px auto 0;
+  padding: 0 40px;
+
+  app-card-tile {
+    max-width: 310px;
+    margin: 0 auto;
+  }
+}
+
+.preview-note {
+  margin: 12px 0 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--app-text-2);
+}
+
+// Card number row: "from a picture" (grey) and "scan" (filled) round buttons.
+.code-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.image-btn {
+  --border-radius: 50%;
+  --padding-start: 0;
+  --padding-end: 0;
+  --icon-font-size: 20px;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+}
+.image-btn::part(native) {
+  background: var(--app-surface-2);
+  color: var(--app-text);
+  border-radius: 50%;
+}
+
+.scan-btn {
+  --background: var(--app-ink);
+  --background-activated: var(--app-ink);
+  --color: var(--app-on-ink);
+  --border-radius: 50%;
+  --padding-start: 0;
+  --padding-end: 0;
+  --icon-font-size: 20px;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+}
+.scan-btn::part(native) {
+  background: var(--app-ink);
+  color: var(--app-on-ink);
+  border-radius: 50%;
+}
+
+.swatches {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: var(--app-surface);
+  box-shadow: 0 0 0 1px var(--app-ring);
+
+  button {
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .auto {
+    height: 34px;
+    padding: 0 13px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--app-surface-2);
+    color: var(--app-text);
+    font-size: 14px;
+    font-weight: 600;
+
+    &.on {
+      background: var(--app-ink);
+      color: var(--app-on-ink);
+    }
+  }
+
+  .swatch {
+    position: relative;
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+
+    &.on {
+      box-shadow:
+        0 0 0 2px var(--app-surface),
+        0 0 0 4px var(--app-ink);
+    }
+  }
+
+  // Rainbow ring = pick any colour; filled with the colour once one is picked.
+  .custom {
+    display: inline-block;
+    overflow: hidden;
+    background: conic-gradient(#f44, #fb3, #4c6, #3bf, #a6f, #f4a, #f44);
+
+    &.on {
+      background: var(--picked);
+    }
+
+    input {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+  }
+}
+
+.photos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.photo-slot {
+  position: relative;
+  aspect-ratio: 1.586;
+  border-radius: 16px;
+  border: 1.5px dashed var(--app-dashed);
+  background: var(--app-surface);
+  color: var(--app-text-2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  overflow: hidden;
+  padding: 0;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+
+  ion-icon {
+    font-size: 22px;
+  }
+
+  img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  // Over a photo the label needs to stay readable.
+  img + span {
+    position: absolute;
+    bottom: 6px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+  }
+}
+
+.hint-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 10px 4px 0;
+}
+
+.hint {
+  flex: 1;
+  margin: 0;
+  font-size: 13px;
+  color: var(--app-text-2);
+}
+
+.bottom-space {
+  height: 40px;
+}
+
+ion-item app-merchant-logo.sugg-logo {
+  --logo-size: 28px;
+}
+
+ion-toggle .toggle-sub {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--app-text-2);
+  white-space: normal;
+}

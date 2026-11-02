@@ -1,0 +1,136 @@
+<ion-header>
+  <ion-toolbar class="hero">
+    <div class="hero-row">
+      <div class="hero-text">
+        @if (hasCards()) {
+          <span class="eyebrow">{{ countLabel() }}</span>
+        }
+        <h1 class="page-title">Wallet</h1>
+      </div>
+      <ion-buttons>
+        <ion-button class="round-btn" (click)="openSettings()" aria-label="Settings">
+          <ion-icon slot="icon-only" name="options-outline" />
+        </ion-button>
+      </ion-buttons>
+    </div>
+  </ion-toolbar>
+  @if (hasCards()) {
+    <ion-toolbar>
+      <ion-searchbar
+        class="app-search"
+        placeholder="Search cards"
+        [value]="query()"
+        [debounce]="0"
+        (ionInput)="query.set($event.detail.value ?? '')"
+      />
+    </ion-toolbar>
+  }
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if (showBanner()) {
+    <button type="button" class="banner" (click)="bannerTap()">
+      <ion-icon name="location-outline" />
+      @if (matches().length === 1) {
+        <span>You're at <strong>{{ matches()[0].card.name }}</strong>. Open card</span>
+      } @else {
+        <span>{{ matches().length }} of your cards work here. Choose one</span>
+      }
+      <ion-icon class="close" name="close-outline" aria-label="Dismiss" (click)="dismissBanner($event)" />
+    </button>
+  }
+
+  @if (hasMemberships()) {
+    <div class="tabs" role="tablist" aria-label="Show">
+      <button type="button" role="tab" [class.on]="activeTab() === 'cards'" [attr.aria-selected]="activeTab() === 'cards'" (click)="tab.set('cards')">
+        Cards
+      </button>
+      <button type="button" role="tab" [class.on]="activeTab() === 'memberships'" [attr.aria-selected]="activeTab() === 'memberships'" (click)="tab.set('memberships')">
+        Memberships
+      </button>
+    </div>
+  }
+
+  @if (!hasCards()) {
+    <div class="empty">
+      <ion-icon name="wallet-outline" />
+      <h2>No cards yet</h2>
+      <p>Tap + to add your first loyalty card.</p>
+    </div>
+  } @else if (visible().length === 0) {
+    <div class="empty">
+      @if (query()) {
+        <p>No {{ activeTab() === 'cards' ? 'cards' : 'memberships' }} match “{{ query() }}”.</p>
+      } @else {
+        <p>No {{ activeTab() === 'cards' ? 'store cards' : 'memberships' }} yet.</p>
+      }
+    </div>
+  } @else if (activeTab() === 'memberships') {
+    <div class="memberships">
+      @for (row of membershipRows(); track row.card.id) {
+        <button type="button" class="m-row" (click)="open(row.card)">
+          <app-merchant-logo class="m-logo" [name]="row.card.name" [merchantId]="row.card.merchantId" [color]="row.card.color" />
+          <span class="m-text">
+            <span class="m-name">{{ row.card.name }}</span>
+            <span class="m-sub" [class.warn]="row.summary?.expired">{{ row.sub }}</span>
+          </span>
+          @if (row.summary?.remaining !== null && row.summary?.remaining !== undefined) {
+            <span class="m-left">
+              <strong>{{ row.summary!.remaining }}</strong>
+              @if (row.summary!.total) {
+                <span class="of">/ {{ row.summary!.total }}</span>
+              }
+              <small>left</small>
+            </span>
+          }
+          @if (row.summary?.progress !== null && row.summary?.progress !== undefined) {
+            <span class="m-bar" aria-hidden="true"><span [style.width.%]="row.summary!.progress! * 100"></span></span>
+          }
+        </button>
+      }
+    </div>
+  } @else {
+    <div [class]="layout()">
+      @for (card of visible(); track card.id) {
+        <app-card-tile
+          [card]="card"
+          [variant]="layout() === 'grid' ? 'logo' : 'full'"
+          [nearby]="nearby().has(card.id)"
+          [attr.data-card-id]="card.id"
+          (click)="open(card)"
+        />
+      }
+    </div>
+  }
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="center">
+    <ion-button class="pill add-pill" (click)="add()">
+      <ion-icon slot="start" name="add" />
+      Add card
+    </ion-button>
+  </ion-fab>
+
+  <ion-modal
+    [isOpen]="sheetOpen()"
+    [initialBreakpoint]="0.5"
+    [breakpoints]="[0, 0.5, 0.9]"
+    (didDismiss)="sheetOpen.set(false)"
+  >
+    <ng-template>
+      <ion-content class="ion-padding">
+        <h3 class="sheet-title">Cards for this place</h3>
+        <ion-list lines="none">
+          @for (m of matches(); track m.card.id) {
+            <ion-item button [detail]="true" (click)="open(m.card)">
+              <app-merchant-logo slot="start" class="sheet-logo" [name]="m.card.name" [merchantId]="m.card.merchantId" [color]="m.card.color" />
+              <ion-label>
+                {{ m.card.name }}
+                <p>{{ distanceLabel(m.distance) }}</p>
+              </ion-label>
+            </ion-item>
+          }
+        </ion-list>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>
