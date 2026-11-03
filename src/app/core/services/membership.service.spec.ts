@@ -97,10 +97,17 @@ describe('MembershipService', () => {
     expect(service.pageUrl(card({ code: `  ${MEMBER_URL}  ` }))).toBe(MEMBER_URL);
   });
 
+  it('accepts member pages on other Natural High hosts', () => {
+    const url = MEMBER_URL.replace('nhb.', 'abonati.');
+    expect(service.pageUrl(card({ code: url }))).toBe(url);
+  });
+
   it('ignores other codes and look-alike sites', () => {
     expect(service.pageUrl(card({ code: '9930003376806' }))).toBeNull();
     expect(service.pageUrl(card({ code: 'https://evil.example/abonat/0123456789abcdef.html' }))).toBeNull();
     expect(service.pageUrl(card({ code: 'https://nhb.naturalhigh.ro/abonat/../admin.html' }))).toBeNull();
+    expect(service.pageUrl(card({ code: 'https://naturalhigh.ro.evil.example/abonat/0123456789abcdef.html' }))).toBeNull();
+    expect(service.pageUrl(card({ code: 'https://evil.example/x.naturalhigh.ro/abonat/0123456789abcdef.html' }))).toBeNull();
     expect(service.pageUrl(undefined)).toBeNull();
   });
 
