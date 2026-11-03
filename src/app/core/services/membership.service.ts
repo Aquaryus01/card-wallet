@@ -16,8 +16,11 @@ export interface MembershipInfo {
 const CACHE_KEY = 'membership.v1';
 const STALE_MS = 5 * 60 * 1000;
 
-/** Natural High member pages: the QR code on the membership email encodes this URL. */
-const NATURAL_HIGH = /^https?:\/\/nhb\.naturalhigh\.ro\/abonat\/[0-9a-f]{16,64}\.html$/i;
+/**
+ * Natural High member pages: the QR code on the membership email encodes this URL.
+ * The host has changed before (nhb. → abonati.), so any naturalhigh.ro subdomain is accepted.
+ */
+const NATURAL_HIGH = /^https?:\/\/[a-z0-9-]+\.naturalhigh\.ro\/abonat\/[0-9a-f]{16,64}\.html$/i;
 
 /**
  * Subscription status for gym cards whose code is a link to the member's status page.
